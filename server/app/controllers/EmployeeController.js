@@ -4,15 +4,8 @@ const fn = require('../utils/Helper')
 createEmployee = (req, res) => {
   const body = req.body
 
-  if (!body) {
-    return res.status(400).json({
-      success: false,
-      error: 'Please provide employee data',
-    })
-  }
-
   const proceed = (seq) => {
-    body.employee_no = `${seq}`
+    body.employee_no = seq
     const employee = new Employee(body)
 
     if (!employee) {
@@ -24,10 +17,10 @@ createEmployee = (req, res) => {
 
     employee
       .save()
-      .then(() => {
+      .then(emp => {
         return res.status(201).json({
           success: true,
-          id: employee._id,
+          id: emp._id,
           message: 'Employee successfully created!',
         })
       })
@@ -45,50 +38,22 @@ createEmployee = (req, res) => {
 updateEmployee = (req, res) => {
   const body = req.body
 
-  if (!body) {
-    return res.status(400).json({
-      success: false,
-      error: 'Please provide data to update',
+  Employee.findOneAndUpdate(
+    { _id: req.params.id }, { ...body },
+    { new: true, runValidators: true })
+    .then(emp => {
+      return res.status(200).json({
+        success: true,
+        id: emp._id,
+        message: 'Employee updated!',
+      })
     })
-  }
-
-  Employee.findOne({ _id: req.params.id }, (err, employee) => {
-    if (err) {
+    .catch(error => {
       return res.status(404).json({
-        err,
-        message: 'Employee not found!',
+        error,
+        message: 'Employee not updated!',
       })
-    }
-
-    employee.employee_no = body.employee_no
-    employee.pin_code = body.pin_code
-    employee.first_name = body.first_name
-    employee.last_name = body.last_name
-    employee.gender = body.gender
-    employee.address = body.address
-    employee.email = body.email
-    employee.contact = body.contact
-    employee.birthdate = body.birthdate
-    employee.role = body.role
-    employee.project = body.project
-    employee.hire_date = body.hire_date
-
-    employee
-      .save()
-      .then(() => {
-        return res.status(200).json({
-          success: true,
-          id: employee._id,
-          message: 'Employee updated!',
-        })
-      })
-      .catch(error => {
-        return res.status(404).json({
-          error,
-          message: 'Employee not updated!',
-        })
-      })
-  })
+    })
 }
 
 deleteEmployee = (req, res) => {

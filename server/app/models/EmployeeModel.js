@@ -3,13 +3,13 @@ const Schema = mongoose.Schema
 
 const Employee = new Schema(
   {
-    employee_no: { type: String, required: true, index: true, unique: true },
+    employee_no: { type: Number, required: true, index: true, unique: true },
     pin_code: { type: Number, required: true },
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     gender: String,
     address: String,
-    email: String,
+    email: { type: String, lowercase: true },
     contact: String,
     birthdate: { type: Date, default: Date.now },
     role: [String],
@@ -19,4 +19,4 @@ const Employee = new Schema(
   { timestamps: true },
 )
 
-module.exports = mongoose.model('employee', Employee);
+module.exports = mongoose.model('employees', Employee);

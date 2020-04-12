@@ -8,17 +8,19 @@ const app = express()
 const db = require('./db')
 const jsonParser = bodyParser.json()
 const urlEncoded = bodyParser.urlencoded({ extended: true })
-const employeeRouter = require('./app/routes/EmployeeRouter')
-// const timelogRouter = require('./app/routes/TimelogRouter')
 
 app.use(cors())
 app.use(jsonParser)
 app.use(urlEncoded)
+
+const employeeRouter = require('./app/routes/EmployeeRouter')
 app.use('/api', employeeRouter)
-// app.use('/api', timelogRouter)
+
+const timelogRouter = require('./app/routes/TimelogRouter')
+app.use('/api', timelogRouter)
 
 app.get('/', (req, res) => {
-  res.send('Hello world. It alive! check check')
+  res.send('Hello world. It alive!')
 })
 
 db.once('error', console.error.bind(console, 'MongoDB connection failed:'))

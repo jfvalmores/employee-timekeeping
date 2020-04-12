@@ -1,7 +1,6 @@
 const express = require('express')
 
 const EmployeeCtrl = require('../controllers/EmployeeController')
-
 const router = express.Router()
 
 router.post('/employee', EmployeeCtrl.createEmployee)
