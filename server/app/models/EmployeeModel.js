@@ -15,6 +15,7 @@ const Employee = new Schema(
     role: [String],
     project: [String],
     hire_date: { type: Date, default: Date.now },
+    admin_flag: { type: Boolean, default: false },
   },
   { timestamps: true },
 )

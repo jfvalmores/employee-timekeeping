@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.get('/timelog-type-list', TimelogCtrl.getTimelogList)
 router.post('/timelog', TimelogCtrl.createTimelog)
-router.put('/timelog/:employee_no', TimelogCtrl.updateTimelog)
-router.delete('/timelog/:employee_no', TimelogCtrl.deleteTimelog)
-router.get('/timelog/:employee_no', TimelogCtrl.getTimelogById)
-router.get('/timelogs', TimelogCtrl.getAllTimelogs)
+router.put('/timelog/:id', TimelogCtrl.updateTimelog)
+router.delete('/timelog/:id', TimelogCtrl.deleteTimelog)
+router.get('/timelog/:id', TimelogCtrl.getTimelogById)
+router.get('/timelogs/:employee_no', TimelogCtrl.getAllTimelogs)
 
 module.exports = router

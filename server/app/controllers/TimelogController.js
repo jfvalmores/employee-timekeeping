@@ -72,7 +72,7 @@ updateTimelog = (req, res) => {
   const body = req.body
 
   Timelog.findOneAndUpdate(
-    { _id: req.params.employee_no }, { ...body },
+    { _id: req.params.id }, { ...body },
     { new: true, runValidators: true })
     .then(log => {
       return res.status(200).json({
@@ -90,7 +90,7 @@ updateTimelog = (req, res) => {
 }
 
 deleteTimelog = (req, res) => {
-  Timelog.findOneAndDelete({ _id: req.params.employee_no }, (err, log) => {
+  Timelog.findOneAndDelete({ _id: req.params.id }, (err, log) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
@@ -100,7 +100,7 @@ deleteTimelog = (req, res) => {
 }
 
 getTimelogById = (req, res) => {
-  Timelog.findOne({ _id: req.params.employee_no }, (err, log) => {
+  Timelog.findOne({ _id: req.params.id }, (err, log) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
@@ -115,9 +115,7 @@ getTimelogById = (req, res) => {
 }
 
 getAllTimelogs = (req, res) => {
-  const body = req.body;
-
-  Timelog.find({ employee_no: body.employee_no }, (err, timelogs) => {
+  Timelog.find({ employee_no: req.params.employee_no }, (err, timelogs) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
