@@ -89,8 +89,8 @@ updateTimelog = (req, res) => {
     })
 }
 
-deleteTimelog = (req, res) => {
-  Timelog.findOneAndDelete({ _id: req.params.id }, (err, log) => {
+deleteTimelog = async (req, res) => {
+  await Timelog.findOneAndDelete({ _id: req.params.id }, (err, log) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
@@ -99,8 +99,8 @@ deleteTimelog = (req, res) => {
   }).catch(err => console.log(err))
 }
 
-getTimelogById = (req, res) => {
-  Timelog.findOne({ _id: req.params.id }, (err, log) => {
+getTimelogById = async (req, res) => {
+  await Timelog.findOne({ _id: req.params.id }, (err, log) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
@@ -114,8 +114,8 @@ getTimelogById = (req, res) => {
   }).catch(err => console.log(err))
 }
 
-getAllTimelogs = (req, res) => {
-  Timelog.find({ employee_no: req.params.employee_no }, (err, timelogs) => {
+getAllTimelogs = async (req, res) => {
+  await Timelog.find({ employee_no: req.params.employee_no }, (err, timelogs) => {
     if (err) {
       return res.status(400).json({ success: false, error: err })
     }
