@@ -61,3 +61,11 @@
   margin: 0;
   top: .125rem !important;
 }
+
+.modal-dialog {
+  max-width: 600px;
+}
+
+#employee-form .col-form-label {
+  text-align: right;
+}

@@ -114,7 +114,7 @@ getEmployees = async (req, res) => {
           .json({ success: false, error: `Employee not found` })
       }
       return res.status(200).json({ success: true, data: employees })
-    }).catch(err => console.log(err))
+    })
 }
 
 module.exports = {
