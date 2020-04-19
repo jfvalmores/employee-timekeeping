@@ -1,0 +1,63 @@
+.popover > .popover-body {
+  padding: 15px;
+}
+
+#login-form .form-row {
+  margin: 10px 0px;
+}
+
+#login-form {
+  position: absolute;
+  top: .5rem !important;
+  margin-top: 0;
+}
+
+#portal-panel {
+  max-width: 500px;
+  margin: 50px auto;
+}
+
+@media (min-width: 576px) {
+  #portal-panel {
+    padding: 1rem 2rem 2rem;
+  }
+}
+
+#portal-name {
+  font-weight: 400;
+  margin: 0.5rem 0 1.5rem;
+  text-align: center;
+}
+
+#main-header {
+  margin: 10px 15px;
+}
+
+#main-header > h2 {
+  font-weight: 400;
+}
+
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#loading-overlay > .spinner-border {
+  position: absolute;
+  top: 40%;
+  right: 50%;
+}
+
+#admin-dropdown > button {
+  height: 46px;
+  margin-right: 10px;
+}
+
+#admin-dropdown-menu {
+  position: absolute;
+  margin: 0;
+  top: .125rem !important;
+}

@@ -1,9 +1,10 @@
 const Employee = require('../models/EmployeeModel')
 
 login = (req, res) => {
-  if (req.session.isLoggedIn) {
+  const sess = req.session
+  if (sess.isLoggedIn) {
     return res
-      .status(400)
+      .status(202)
       .json({
         success: false,
         error: 'A user is already logged in. Please retry later.'
@@ -16,24 +17,29 @@ login = (req, res) => {
   Employee.findOne({ employee_no }, (err, employee) => {
     if (!employee) {
       return res
-        .status(404)
+        .status(202)
         .json({ success: false, error: `Employee not found.` })
     }
 
-    Employee.$where(`this.pin_code === ${pin_code}`).exec((err, doc) => {
-      if (err && !doc) {
+    Employee.find({ _id: employee._id, employee_no, pin_code }).exec((err, doc) => {
+      if (err || (!doc || doc.length <= 0)) {
         return res
-          .status(400)
+          .status(202)
           .json({ success: false, error: `Invalid credentials.` })
       }
 
-      req.session.isLoggedIn = true;
-      req.session.loggedUser = doc[0];
+      sess.isLoggedIn = true;
+      sess.loggedUser = doc[0];
 
       return res
         .status(200)
         .json({
           success: true,
+          user: {
+            employee_no: employee.employee_no,
+            first_name: employee.first_name,
+            admin_flag: employee.admin_flag,
+          },
           message: `${doc[0].first_name} successfully logged in.`
         })
     })
@@ -41,18 +47,20 @@ login = (req, res) => {
 }
 
 logout = (req, res) => {
-  const user = req.session.loggedUser
-  req.session.isLoggedIn = false
-  req.session.loggedUser = null
+  const sess = req.session
+  const user = sess.loggedUser
 
   if (!user) {
     return res
-      .status(400)
+      .status(202)
       .json({
         success: true,
         message: 'Already logged out'
       })
   }
+
+  sess.isLoggedIn = false
+  sess.loggedUser = null
 
   return res.status(200).json({
     success: true,

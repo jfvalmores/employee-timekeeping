@@ -17,12 +17,12 @@ createTimelog = (req, res) => {
   Employee.findOne({ employee_no: body.employee_no, pin_code: body.pin_code },
     (err, employee) => {
       if (err) {
-        return res.status(400).json({ success: false, error: err })
+        return res.status(202).json({ success: false, error: err })
       }
 
       if (!employee) {
         return res
-          .status(404)
+          .status(202)
           .json({ success: false, error: `Invalid employee credentials.` })
       }
       saveLog(employee);
@@ -32,7 +32,7 @@ createTimelog = (req, res) => {
     const timelog = new Timelog(body);
 
     if (!timelog) {
-      return res.status(400).json({
+      return res.status(202).json({
         success: false,
         error: err
       })
@@ -60,7 +60,7 @@ createTimelog = (req, res) => {
         })
       })
       .catch(error => {
-        return res.status(400).json({
+        return res.status(202).json({
           error,
           message: `Failed to create timelog!`
         })
@@ -82,7 +82,7 @@ updateTimelog = (req, res) => {
       })
     })
     .catch(error => {
-      return res.status(404).json({
+      return res.status(202).json({
         error,
         message: 'Timelog not updated!',
       })
@@ -92,7 +92,7 @@ updateTimelog = (req, res) => {
 deleteTimelog = async (req, res) => {
   await Timelog.findOneAndDelete({ _id: req.params.id }, (err, log) => {
     if (err) {
-      return res.status(400).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err })
     }
 
     return res.status(200).json({ success: true, data: log })
@@ -102,12 +102,12 @@ deleteTimelog = async (req, res) => {
 getTimelogById = async (req, res) => {
   await Timelog.findOne({ _id: req.params.id }, (err, log) => {
     if (err) {
-      return res.status(400).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err })
     }
 
     if (!log) {
       return res
-        .status(404)
+        .status(202)
         .json({ success: false, error: `Timelog not found` })
     }
     return res.status(200).json({ success: true, data: log })
@@ -115,17 +115,20 @@ getTimelogById = async (req, res) => {
 }
 
 getAllTimelogs = async (req, res) => {
-  await Timelog.find({ employee_no: req.params.employee_no }, (err, timelogs) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err })
-    }
-    if (!timelogs.length) {
-      return res
-        .status(404)
-        .json({ success: false, error: `Timelogs not found` })
-    }
-    return res.status(200).json({ success: true, data: timelogs })
-  }).catch(err => console.log(err))
+  await Timelog
+    .find({ employee_no: req.params.employee_no })
+    .sort({ entry_date: 'desc', entry_time: 'desc' })
+    .exec((err, timelogs) => {
+      if (err) {
+        return res.status(202).json({ success: false, error: err })
+      }
+      if (!timelogs.length) {
+        return res
+          .status(202)
+          .json({ success: false, error: `Timelogs not found` })
+      }
+      return res.status(200).json({ success: true, data: timelogs })
+    })
 }
 
 module.exports = {

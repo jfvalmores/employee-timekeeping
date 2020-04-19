@@ -10,8 +10,12 @@ const db = require('./db')
 const routes = require('./app/routes')
 const jsonParser = bodyParser.json()
 const urlEncoded = bodyParser.urlencoded({ extended: true })
+const corsOptions = {
+  origin: ['http://localhost:3000'],
+  credentials: true
+}
 
-app.use(cors())
+app.use(cors(corsOptions));
 app.use(jsonParser)
 app.use(urlEncoded)
 app.use(session({

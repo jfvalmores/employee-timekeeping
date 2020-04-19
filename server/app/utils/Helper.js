@@ -29,12 +29,16 @@ getTimelogTypeList = () => {
 
 getMMDDYYYYSlashed = () => {
   const now = new Date()
-  return `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`
+  return `${pad(now.getMonth())}/${pad(now.getDate())}/${pad(now.getFullYear())}`
 }
 
 getHHMMSSColon = () => {
   const now = new Date()
-  return `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+  return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+}
+
+pad = (s, len = 2, affix = '0') => {
+  return String(s).padStart(len, affix)
 }
 
 module.exports = {

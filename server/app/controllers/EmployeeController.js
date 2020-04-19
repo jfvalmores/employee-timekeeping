@@ -1,6 +1,25 @@
 const Employee = require('../models/EmployeeModel')
 const fn = require('../utils/Helper')
 
+setInitial = () => {
+  Employee
+    .findOne({ employee_no: 0, pin_code: 0 })
+    .exec((err, emp) => {
+      if (err || !emp) {
+        const employee = new Employee({
+          employee_no: 0,
+          pin_code: 0,
+          first_name: 'Admin',
+          last_name: 'Nistrator',
+          admin_flag: true,
+        })
+
+        employee.save()
+      }
+    })
+}
+setInitial()
+
 createEmployee = (req, res) => {
   const body = req.body
 
@@ -9,7 +28,7 @@ createEmployee = (req, res) => {
     const employee = new Employee(body)
 
     if (!employee) {
-      return res.status(400).json({
+      return res.status(202).json({
         success: false,
         error: err
       })
@@ -25,7 +44,7 @@ createEmployee = (req, res) => {
         })
       })
       .catch(error => {
-        return res.status(400).json({
+        return res.status(202).json({
           error,
           message: 'Employee not created!'
         })
@@ -49,7 +68,7 @@ updateEmployee = (req, res) => {
       })
     })
     .catch(error => {
-      return res.status(404).json({
+      return res.status(202).json({
         error,
         message: 'Employee not updated!',
       })
@@ -59,7 +78,7 @@ updateEmployee = (req, res) => {
 deleteEmployee = (req, res) => {
   Employee.findOneAndDelete({ _id: req.params.id }, (err, employee) => {
     if (err) {
-      return res.status(400).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err })
     }
 
     return res.status(200).json({ success: true, data: employee })
@@ -69,12 +88,12 @@ deleteEmployee = (req, res) => {
 getEmployeeById = async (req, res) => {
   await Employee.findOne({ _id: req.params.id }, (err, employee) => {
     if (err) {
-      return res.status(400).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err })
     }
 
     if (!employee) {
       return res
-        .status(404)
+        .status(202)
         .json({ success: false, error: `Employee not found` })
     }
     return res.status(200).json({ success: true, data: employee })
@@ -82,17 +101,20 @@ getEmployeeById = async (req, res) => {
 }
 
 getEmployees = async (req, res) => {
-  await Employee.find({}, (err, employees) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err })
-    }
-    if (!employees.length) {
-      return res
-        .status(404)
-        .json({ success: false, error: `Employee not found` })
-    }
-    return res.status(200).json({ success: true, data: employees })
-  }).catch(err => console.log(err))
+  await Employee
+    .find({})
+    .sort({ employee_no: 'asc' })
+    .exec((err, employees) => {
+      if (err) {
+        return res.status(202).json({ success: false, error: err })
+      }
+      if (!employees.length) {
+        return res
+          .status(202)
+          .json({ success: false, error: `Employee not found` })
+      }
+      return res.status(200).json({ success: true, data: employees })
+    }).catch(err => console.log(err))
 }
 
 module.exports = {
