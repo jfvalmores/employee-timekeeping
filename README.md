@@ -10,5 +10,5 @@
   - Create time log
   - Login and view log list
   
-  ## Technologies
-    * MERN Stack
+## Technologies
+* MERN Stack
