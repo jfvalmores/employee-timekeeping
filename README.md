@@ -11,4 +11,7 @@
   - Login and view log list
   
 ## Technologies
-* MERN Stack
+* MongoDB
+* ExpressJS
+* React + Redux
+* NodeJS
