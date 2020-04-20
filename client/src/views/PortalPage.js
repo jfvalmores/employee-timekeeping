@@ -20,6 +20,7 @@ const PortalPageContainer = (props) => {
     user,
     doLogout,
     logTypes,
+    setLoading,
     companyName,
   } = props
 
@@ -27,13 +28,22 @@ const PortalPageContainer = (props) => {
     <>
       <Header user={user} doLogout={doLogout} />
       <Container>
-        <TimelogForm logTypes={logTypes} companyName={companyName} />
+        <TimelogForm
+          logTypes={logTypes}
+          setLoading={setLoading}
+          companyName={companyName} />
       </Container>
     </>
   )
 }
 
-const TimelogForm = ({ logTypes, companyName, setLoading }) => {
+const TimelogForm = (props) => {
+  const {
+    logTypes,
+    setLoading,
+    companyName
+  } = props
+
   const formRef = useRef(null);
   const defaultForm = {
     employee_no: '',
@@ -71,10 +81,7 @@ const TimelogForm = ({ logTypes, companyName, setLoading }) => {
       createTimelog(data)
         .then(res => {
           if (res.data.success) {
-            alert(`
-              ${res.data.message} 
-              ${res.data.employee_name} 
-              ${res.data.type.alert} at ${res.data.time}.`)
+            alert(`${res.data.message} ${res.data.employee_name} ${res.data.type.alert} at ${res.data.time}.`)
             setState(defaultForm)
           } else {
             alert(res.data.error)
