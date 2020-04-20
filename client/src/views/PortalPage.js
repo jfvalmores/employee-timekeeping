@@ -9,16 +9,20 @@ import {
 import { createTimelog } from '../api'
 import { Main, Header } from '../components'
 
-const PortalPage = () => {
-  return (
-    <Main>
-      <PortalPageContainer />
-    </Main>
-  )
-}
+const PortalPage = () => (
+  <Main>
+    <PortalPageContainer />
+  </Main>
+)
 
-const PortalPageContainer = ({ logTypes, companyName, user, doLogout }) => {
-  console.log(logTypes);
+const PortalPageContainer = (props) => {
+  const {
+    user,
+    doLogout,
+    logTypes,
+    companyName,
+  } = props
+
   return (
     <>
       <Header user={user} doLogout={doLogout} />
@@ -29,7 +33,7 @@ const PortalPageContainer = ({ logTypes, companyName, user, doLogout }) => {
   )
 }
 
-const TimelogForm = ({ logTypes, companyName }) => {
+const TimelogForm = ({ logTypes, companyName, setLoading }) => {
   const formRef = useRef(null);
   const defaultForm = {
     employee_no: '',
@@ -63,14 +67,19 @@ const TimelogForm = ({ logTypes, companyName }) => {
     e.preventDefault()
     const data = { ...state }
     if (isFormValid(data)) {
+      setLoading(true)
       createTimelog(data)
         .then(res => {
           if (res.data.success) {
-            alert(`${res.data.message} ${res.data.employee_name} ${res.data.type.alert} at ${res.data.time}.`)
+            alert(`
+              ${res.data.message} 
+              ${res.data.employee_name} 
+              ${res.data.type.alert} at ${res.data.time}.`)
             setState(defaultForm)
           } else {
             alert(res.data.error)
           }
+          setLoading(false)
         })
         .catch(err => console.error(err))
     }

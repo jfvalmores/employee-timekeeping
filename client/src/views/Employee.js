@@ -3,234 +3,220 @@ import {
   Main,
   Header
 } from '../components'
-import { getAllEmployees } from '../api'
 import {
-  Col,
-  Row,
-  Form,
-  Table,
-  Modal,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getAllEmployees,
+} from '../api'
+import {
   Button,
   Container,
 } from 'react-bootstrap'
+import EmployeeList from './Employee/EmployeeList'
 
-const Employee = () => {
-  return (
-    <Main>
-      <EmployeeContainer />
-    </Main>
-  );
-}
+const Employee = () => (
+  <Main>
+    <EmployeeContainer />
+  </Main>
+)
 
-const EmployeeContainer = ({ user, doLogout }) => {
-  const [employeeList, setEmployeeList] = useState([])
-  const [isDetail, showEmpDetail] = useState(false)
-  const [selected, setSelected] = useState({})
-  const [params, setParams] = useState({})
+const EmployeeContainer = (props) => {
+  const {
+    user,
+    doLogout,
+    setLoading
+  } = props
+
   const [mode, setMode] = useState('VIEW')
+  const [params, setParams] = useState({})
+  const [auxParams, setAuxParams] = useState({})
+  const [isDetail, showEmpDetail] = useState(false)
+  const [employeeList, setEmployeeList] = useState([])
+
+  const defaultAuxParams = {
+    roleInput: '',
+    projectInput: '',
+  }
+
+  const defaultParams = {
+    email: '',
+    gender: '',
+    contact: '',
+    address: '',
+    pin_code: '',
+    last_name: '',
+    first_name: '',
+    employee_no: '',
+    birthdate: new Date(),
+    hire_date: new Date(),
+    role: [],
+    project: [],
+  }
 
   useEffect(() => {
-    getAllEmployees()
-      .then(res => {
-        console.log(res)
-        if (res.data.success) {
-          setEmployeeList(res.data.data)
-        }
-      })
+    getAll()
     // eslint-disable-next-line
   }, [])
 
+  const getAll = () => {
+    setLoading(true)
+    getAllEmployees()
+      .then(res => {
+        if (res.data.success) {
+          setEmployeeList(formatData(res.data.data))
+        }
+        setLoading(false)
+      })
+  }
+
+  const formatData = (list) => {
+    return list.map(item => ({
+      ...item,
+      birthdate: new Date(item.birthdate),
+      hire_date: new Date(item.hire_date),
+    }))
+  }
+
   const showDetail = (employee) => {
     setMode('VIEW')
-    setSelected(employee)
     setParams(employee)
+    setAuxParams(defaultAuxParams)
     showEmpDetail(true)
   }
 
   const handleClose = () => {
-    // TODO
     showEmpDetail(false)
   }
 
-  const handleDelete = () => {
-    // TODO
+  const handleDelete = (id) => {
+    if (!window.confirm('Are you sure you want to delete this employee?')) return;
+
+    setLoading(true)
+    deleteEmployee(id)
+      .then(res => {
+        if (res.data.success) {
+          alert('Emplyee has been delete.')
+          getAll()
+        }
+        setLoading(false)
+      })
   }
 
   const handleSave = () => {
-    // TODO
+    setLoading(true)
+    if (!params._id) {
+      createEmployee(params)
+        .then(res => {
+          alert(res.data.message)
+          if (res.data.success) {
+            handleClose()
+            getAll()
+          }
+          setLoading(false)
+        })
+    } else {
+      updateEmployee(params._id, params)
+        .then(res => {
+          alert(res.data.message)
+          if (res.data.success) {
+            setMode('VIEW')
+            getAll()
+          }
+          setLoading(false)
+        })
+    }
   }
 
   const handleNew = () => {
-    // TODO
     setMode('NEW')
-    setSelected({})
-    setParams({})
+    setParams(defaultParams)
+    setAuxParams(defaultAuxParams)
     showEmpDetail(true)
+  }
+
+  const handleChange = (e) => {
+    const { id, value } = e.target
+    setParams({
+      ...params,
+      [id]: value
+    })
+  }
+
+  const handleDateChange = (id, value) => {
+    setParams({
+      ...params,
+      [id]: value
+    })
+  }
+
+  const handleAuxChange = (e) => {
+    const { id, value } = e.target
+    setAuxParams({
+      ...auxParams,
+      [id]: value
+    })
+  }
+
+  const addItemToList = (e, paramKey) => {
+    if (e.keyCode === 13) {
+      const { id, value } = e.target
+      const list = [...params[paramKey]]
+      if (String(value) === '') return;
+
+      list.push(value)
+      setParams({
+        ...params,
+        [paramKey]: list
+      })
+
+      setAuxParams({
+        ...auxParams,
+        [id]: ''
+      })
+    }
+  }
+
+  const removeFromList = (index, paramKey) => {
+    let list = [...params[paramKey]]
+    list.splice(index, 1)
+
+    setParams({
+      ...params,
+      [paramKey]: list
+    })
   }
 
   return (
     <>
-      <Header user={user} doLogout={doLogout} />
+      <Header
+        user={user}
+        doLogout={doLogout} />
       <Container>
-        <Button variant="primary" onClick={handleNew}> Add Employee </Button>
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Employee No.</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeList.map(item =>
-              <tr key={item._id} onDoubleClick={() => showDetail(item)}>
-                <td>{item.employee_no}</td>
-                <td>
-                  {/* eslint-disable-next-line */}
-                  <a href="" onClick={(e) => { e.preventDefault(); showDetail(item); }}>
-                    {`${item.first_name} ${item.last_name}`}
-                  </a>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-
-        <Modal show={isDetail} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Employee Detail</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form id="employee-form">
-              <Form.Group as={Row} controlId="employee_no">
-                <Form.Label column sm="3">Employee No.</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Employee No."
-                    value={params.employee_no}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="pin_code">
-                <Form.Label column sm="3">PIN</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="password"
-                    placeholder="PIN"
-                    value={params.pin_code}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="first_name">
-                <Form.Label column sm="3">First Name</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="First Name"
-                    value={params.first_name}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="last_name">
-                <Form.Label column sm="3">Last Name</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Last Name"
-                    value={params.last_name}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="gender">
-                <Form.Label column sm="3">Gender</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Gender"
-                    value={params.gender}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="address">
-                <Form.Label column sm="3">Address</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    as="textarea"
-                    rows="2"
-                    placeholder="Address"
-                    value={params.address}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="email">
-                <Form.Label column sm="3">Email</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="email"
-                    placeholder="Email"
-                    value={params.email}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="contact">
-                <Form.Label column sm="3">Contact</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Contact"
-                    value={params.contact}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="birthdate">
-                <Form.Label column sm="3">Birthdate</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Birthdate"
-                    value={params.birthdate}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="hire_date">
-                <Form.Label column sm="3">Date Hired</Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    type="text"
-                    placeholder="Date Hired"
-                    value={params.hire_date}
-                    disabled={mode === 'VIEW'} />
-                </Col>
-              </Form.Group>
-              <div>
-                <span>Roles: </span>{' '}<span>{params.role && params.role.join(', ')}</span>
-              </div>
-              <div>
-                <span>Projects: </span>{' '}<span>{params.project && params.project.join(', ')}</span>
-              </div>
-              <div>
-                <span>Created At: </span>{' '}<span>{params.createdAt}</span>
-              </div>
-              <div>
-                <span>Updated At: </span>{' '}<span>{params.updatedAt}</span>
-              </div>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            {mode === 'VIEW' ?
-              <>
-                <Button variant="info" onClick={() => setMode('EDIT')}> Edit </Button>
-                <Button variant="danger" onClick={handleDelete}> Delete </Button>
-              </>
-              :
-              <>
-                <Button variant="secondary" onClick={() => setMode('VIEW')}> Cancel </Button>
-                <Button variant="primary" onClick={handleSave}> Save </Button>
-              </>
-            }
-          </Modal.Footer>
-        </Modal>
+        <Button
+          style={{ marginBottom: 10 }}
+          variant="primary"
+          onClick={handleNew}
+        >
+          Add Employee
+        </Button>
+        <EmployeeList
+          mode={mode}
+          params={params}
+          setMode={setMode}
+          isDetail={isDetail}
+          auxParams={auxParams}
+          employeeList={employeeList}
+          showDetail={showDetail}
+          handleSave={handleSave}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+          handleChange={handleChange}
+          addItemToList={addItemToList}
+          removeFromList={removeFromList}
+          handleAuxChange={handleAuxChange}
+          handleDateChange={handleDateChange}
+        />
       </Container>
     </>
   )

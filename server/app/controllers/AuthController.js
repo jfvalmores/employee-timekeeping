@@ -3,11 +3,14 @@ const Employee = require('../models/EmployeeModel')
 login = (req, res) => {
   const sess = req.session
   if (sess.isLoggedIn) {
+    sess.isLoggedIn = false;
+    sess.loggedUser = null;
+
     return res
       .status(202)
       .json({
         success: false,
-        error: 'A user is already logged in. Please retry later.'
+        error: 'User is already logged in. Logging out previous session... Please retry.'
       })
   }
 

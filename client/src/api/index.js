@@ -4,18 +4,32 @@ const conn = axios.create({
   withCredentials: true
 })
 
-const getTimeLogTypeList = () => conn.get('timelog-type-list')
 const login = (params) => conn.post('login', params)
 const logout = (params) => conn.post('logout', params)
+
+const getTimeLogTypeList = () => conn.get('timelog-type-list')
 const createTimelog = (params) => conn.post('timelog', params)
-const getTimelogs = (params) => conn.get(`timelogs/${params.employee_no}`)
+const getTimelogs = (employee_no) => conn.get(`timelogs/${employee_no}`)
+
 const getAllEmployees = () => conn.get('employees')
+const getEmployee = (id) => conn.get(`employee/${id}`)
+const createEmployee = (params) => conn.post('employee', params)
+const updateEmployee = (id, params) => conn.put(`employee/${id}`, params)
+const deleteEmployee = (id) => conn.delete(`employee/${id}`)
+
+// TODO: More admin functions i.e. Timelog modifications
 
 export {
-  getTimeLogTypeList,
   login,
   logout,
+
+  getTimeLogTypeList,
   createTimelog,
   getTimelogs,
+
   getAllEmployees,
+  getEmployee,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
 }

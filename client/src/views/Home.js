@@ -3,24 +3,30 @@ import { Header, Main } from '../components'
 import { getTimelogs } from '../api'
 import { Table, Container } from 'react-bootstrap'
 
-const Home = () => {
-  return (
-    <Main>
-      <HomeContainer />
-    </Main>
-  )
-}
+const Home = () => (
+  <Main>
+    <HomeContainer />
+  </Main>
+)
 
-const HomeContainer = ({ user, doLogout, logTypes }) => {
+const HomeContainer = (props) => {
+  const {
+    user,
+    doLogout,
+    logTypes,
+    setLoading
+  } = props
+
   const [logList, setLogList] = useState([]);
 
   useEffect(() => {
-    getTimelogs({ employee_no: user.employee_no })
+    setLoading(true)
+    getTimelogs(user.employee_no)
       .then(res => {
         if (res.data.success) {
-          console.log(res.data.data)
           setLogList(res.data.data);
         }
+        setLoading(false)
       })
       .catch(err => console.error(err))
     // eslint-disable-next-line
@@ -33,9 +39,14 @@ const HomeContainer = ({ user, doLogout, logTypes }) => {
 
   return (
     <>
-      <Header user={user} doLogout={doLogout} />
+      <Header
+        user={user}
+        doLogout={doLogout} />
       <Container>
-        <Table striped bordered hover size="sm">
+        <Table
+          striped
+          bordered
+          hover size="sm">
           <thead>
             <tr>
               <th>Log ID</th>

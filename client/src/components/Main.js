@@ -27,7 +27,6 @@ const Main = ({ children }) => {
     setLoading(true)
     getTimeLogTypeList()
       .then(res => {
-        console.log(res.data.list);
         if (res.data.success) {
           setLogTypes(dispatch, res.data.list)
         }

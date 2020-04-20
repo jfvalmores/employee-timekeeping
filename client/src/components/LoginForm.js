@@ -56,7 +56,6 @@ const LoginForm = () => {
     setLoadingOn(dispatch)
     login({ ...state })
       .then(res => {
-        console.log(res.data);
         if (res.data.success) {
           alert(res.data.message)
           setLoggedUser(dispatch, res.data.user)
@@ -66,7 +65,6 @@ const LoginForm = () => {
         setLoadingOff(dispatch)
       })
       .catch(err => {
-        console.log(err);
         alert(err)
         setLoadingOff(dispatch)
       })

@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
+  Route,
   Switch,
   Redirect,
-  Route,
+  BrowserRouter as Router,
 } from 'react-router-dom';
 import {
   Home,
