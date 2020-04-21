@@ -4,6 +4,7 @@ import {
   Header
 } from '../components'
 import {
+  getEmployee,
   createEmployee,
   updateEmployee,
   deleteEmployee,
@@ -13,7 +14,10 @@ import {
   Button,
   Container,
 } from 'react-bootstrap'
-import EmployeeList from './Employee/EmployeeList'
+import {
+  EmployeeList,
+  EmployeeDetail
+} from './Employee/'
 
 const Employee = () => (
   <Main>
@@ -64,18 +68,33 @@ const EmployeeContainer = (props) => {
     getAllEmployees()
       .then(res => {
         if (res.data.success) {
-          setEmployeeList(formatData(res.data.data))
+          setEmployeeList(formatList(res.data.data))
         }
         setLoading(false)
       })
   }
 
-  const formatData = (list) => {
-    return list.map(item => ({
-      ...item,
-      birthdate: new Date(item.birthdate),
-      hire_date: new Date(item.hire_date),
-    }))
+  const getDetail = (id) => {
+    setLoading(true)
+    getEmployee(id)
+      .then(res => {
+        if (res.data.success) {
+          setParams(formatDetail(res.data.data))
+        }
+        setLoading(false)
+      })
+  }
+
+  const formatList = (list) => {
+    return list.map(item => (formatDetail(item)))
+  }
+
+  const formatDetail = (detail) => {
+    return {
+      ...detail,
+      birthdate: new Date(detail.birthdate),
+      hire_date: new Date(detail.hire_date),
+    }
   }
 
   const showDetail = (employee) => {
@@ -111,7 +130,7 @@ const EmployeeContainer = (props) => {
           alert(res.data.message)
           if (res.data.success) {
             handleClose()
-            getAll()
+            getDetail(res.data.id)
           }
           setLoading(false)
         })
@@ -121,7 +140,7 @@ const EmployeeContainer = (props) => {
           alert(res.data.message)
           if (res.data.success) {
             setMode('VIEW')
-            getAll()
+            getDetail(res.data.id)
           }
           setLoading(false)
         })
@@ -201,16 +220,18 @@ const EmployeeContainer = (props) => {
           Add Employee
         </Button>
         <EmployeeList
+          showDetail={showDetail}
+          handleDelete={handleDelete}
+          employeeList={employeeList}
+        />
+        <EmployeeDetail
           mode={mode}
           params={params}
           setMode={setMode}
           isDetail={isDetail}
           auxParams={auxParams}
-          employeeList={employeeList}
-          showDetail={showDetail}
           handleSave={handleSave}
           handleClose={handleClose}
-          handleDelete={handleDelete}
           handleChange={handleChange}
           addItemToList={addItemToList}
           removeFromList={removeFromList}

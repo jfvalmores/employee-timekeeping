@@ -2,25 +2,12 @@ import React from 'react'
 import {
   Table,
 } from 'react-bootstrap'
-import EmployeeDetail from './EmployeeDetail'
 
 const EmployeeList = (props) => {
   const {
-    mode,
-    params,
-    setMode,
-    isDetail,
-    auxParams,
-    handleSave,
     showDetail,
-    handleClose,
-    employeeList,
     handleDelete,
-    handleChange,
-    addItemToList,
-    removeFromList,
-    handleAuxChange,
-    handleDateChange,
+    employeeList,
   } = props
 
   return (
@@ -72,20 +59,6 @@ const EmployeeList = (props) => {
           )}
         </tbody>
       </Table>
-      <EmployeeDetail
-        mode={mode}
-        params={params}
-        setMode={setMode}
-        isDetail={isDetail}
-        auxParams={auxParams}
-        handleSave={handleSave}
-        handleClose={handleClose}
-        handleChange={handleChange}
-        addItemToList={addItemToList}
-        removeFromList={removeFromList}
-        handleAuxChange={handleAuxChange}
-        handleDateChange={handleDateChange}
-      />
     </>
   )
 }

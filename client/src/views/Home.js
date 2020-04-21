@@ -49,7 +49,6 @@ const HomeContainer = (props) => {
           hover size="sm">
           <thead>
             <tr>
-              <th>Log ID</th>
               <th>Log Type</th>
               <th>Date</th>
               <th>Time</th>
@@ -58,7 +57,6 @@ const HomeContainer = (props) => {
           <tbody>
             {logList.map(item =>
               <tr key={item._id}>
-                <td>{item._id}</td>
                 <td>{timeLogLabel(item.log_type)}</td>
                 <td>{item.entry_date}</td>
                 <td>{item.entry_time}</td>
