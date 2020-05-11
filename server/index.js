@@ -1,6 +1,7 @@
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const dotenv = require('dotenv').config()
 
 const cors = require('cors')
 require('./config')
@@ -13,6 +14,7 @@ const urlEncoded = bodyParser.urlencoded({ extended: true })
 
 const PORT = process.env.PORT || API_PORT;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+console.log(CLIENT_URL);
 
 const corsOptions = {
   origin: [CLIENT_URL],

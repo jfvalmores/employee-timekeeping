@@ -132,6 +132,7 @@ const EmployeeContainer = (props) => {
             toast(res.data.message, 'success');
             handleClose()
             getDetail(res.data.id)
+            getAll()
           } else {
             toast(res.data.message);
           }
@@ -145,6 +146,7 @@ const EmployeeContainer = (props) => {
             toast(res.data.message, 'success')
             setMode('VIEW')
             getDetail(res.data.id)
+            getAll()
           } else {
             toast(res.data.message);
           }
