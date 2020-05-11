@@ -21,3 +21,8 @@ export const setLogTypes = logTypes => ({
   type: actionTypes.SET_TIMELOG_TYPES,
   logTypes
 })
+
+export const setPopup = payload => ({
+  type: actionTypes.SET_POPUP,
+  payload
+})

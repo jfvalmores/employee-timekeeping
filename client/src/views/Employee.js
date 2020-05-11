@@ -28,6 +28,7 @@ const Employee = () => (
 const EmployeeContainer = (props) => {
   const {
     user,
+    toast,
     doLogout,
     setLoading
   } = props
@@ -115,7 +116,7 @@ const EmployeeContainer = (props) => {
     deleteEmployee(id)
       .then(res => {
         if (res.data.success) {
-          alert('Emplyee has been delete.')
+          toast('Emplyee has been delete.', 'success')
           getAll()
         }
         setLoading(false)
@@ -127,21 +128,27 @@ const EmployeeContainer = (props) => {
     if (!params._id) {
       createEmployee(params)
         .then(res => {
-          alert(res.data.message)
           if (res.data.success) {
+            toast(res.data.message, 'success');
             handleClose()
             getDetail(res.data.id)
+          } else {
+            toast(res.data.message);
           }
+
           setLoading(false)
         })
     } else {
       updateEmployee(params._id, params)
         .then(res => {
-          alert(res.data.message)
           if (res.data.success) {
+            toast(res.data.message, 'success')
             setMode('VIEW')
             getDetail(res.data.id)
+          } else {
+            toast(res.data.message);
           }
+
           setLoading(false)
         })
     }

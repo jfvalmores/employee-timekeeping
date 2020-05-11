@@ -29,7 +29,7 @@ getTimelogTypeList = () => {
 
 getMMDDYYYYSlashed = () => {
   const now = new Date()
-  return `${pad(now.getMonth())}/${pad(now.getDate())}/${pad(now.getFullYear())}`
+  return `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${pad(now.getFullYear())}`
 }
 
 getHHMMSSColon = () => {

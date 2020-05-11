@@ -10,8 +10,12 @@ const db = require('./db')
 const routes = require('./app/routes')
 const jsonParser = bodyParser.json()
 const urlEncoded = bodyParser.urlencoded({ extended: true })
+
+const PORT = process.env.PORT || API_PORT;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: [CLIENT_URL],
   credentials: true
 }
 
@@ -31,9 +35,9 @@ app.use('/api', [
 ])
 
 app.get('/', (req, res) => {
-  res.send('Hello world. It alive!')
+  res.send("Hello world. It's alive!")
 })
 
 db.once('error', console.error.bind(console, 'MongoDB connection failed:'))
 
-app.listen(API_PORT, () => console.log(`Server running on port ${API_PORT}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

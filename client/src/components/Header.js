@@ -3,13 +3,14 @@ import {
   Row,
   Col,
   Button,
+  Popover,
   Dropdown,
   OverlayTrigger,
 } from 'react-bootstrap'
-import LoginPopup from './LoginPopup'
+import LoginForm from './LoginForm'
 import { Link } from 'react-router-dom'
 
-const Header = ({ user, doLogout }) => {
+const Header = ({ user, doLogout, toast }) => {
   return (
     <Row id="main-header">
       <h2>Employee Time Tracker</h2>
@@ -36,7 +37,17 @@ const Header = ({ user, doLogout }) => {
           <Button variant="outline-info" onClick={doLogout}>Logout</Button>
         </>
         :
-        <OverlayTrigger trigger="click" placement="bottom" overlay={LoginPopup}>
+        <OverlayTrigger
+          trigger="click"
+          placement="bottom"
+          overlay={
+            <Popover id="login-form">
+              <Popover.Title as="h3">Enter employee credentials</Popover.Title>
+              <Popover.Content>
+                <LoginForm toast={toast} />
+              </Popover.Content>
+            </Popover>
+          }>
           <Button variant="outline-info">Login here</Button>
         </OverlayTrigger>
       }

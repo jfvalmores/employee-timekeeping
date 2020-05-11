@@ -1,8 +1,13 @@
 const initialState = {
   loading: true,
   user: null,
-  companyName: 'SomeDev Company',
+  companyName: 'Doofenshmirtz Inc.',
   logTypes: [],
+  popup: {
+    open: false,
+    message: '',
+    type: 'alert'
+  }
 }
 
 export const main = (state = initialState, action) => {
@@ -38,6 +43,12 @@ export const main = (state = initialState, action) => {
       return {
         ...state,
         logTypes: action.logTypes
+      }
+
+    case 'SET_POPUP':
+      return {
+        ...state,
+        popup: action.payload
       }
 
     default:

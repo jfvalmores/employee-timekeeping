@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 mongoose
-  .connect(DB_URL, { useNewUrlParser: true })
+  .connect(process.env.MONGODB_URI || DB_URI, { useNewUrlParser: true })
   .then(() => console.log('Database connection successful.'))
   .catch(e => console.error('Database connection error.', e.message))
 

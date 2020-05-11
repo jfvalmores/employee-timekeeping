@@ -19,3 +19,7 @@ export const removeLoggedUser = dispatch => {
 export const setLogTypes = (dispatch, logTypes) => {
   dispatch(actions.setLogTypes(logTypes))
 }
+
+export const setPopup = (dispatch, payload) => {
+  dispatch(actions.setPopup(payload))
+}

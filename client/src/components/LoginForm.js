@@ -7,7 +7,7 @@ import { login } from '../api'
 import { setLoadingOn, setLoadingOff, setLoggedUser } from '../state/operations'
 import { useDispatch } from 'react-redux'
 
-const LoginForm = () => {
+const LoginForm = ({ toast }) => {
   const [state, setState] = useState({
     employee_no: '',
     pin_code: '',
@@ -57,15 +57,15 @@ const LoginForm = () => {
     login({ ...state })
       .then(res => {
         if (res.data.success) {
-          alert(res.data.message)
+          toast(res.data.message, 'success')
           setLoggedUser(dispatch, res.data.user)
         } else {
-          alert(res.data.error)
+          toast(res.data.error)
         }
         setLoadingOff(dispatch)
       })
       .catch(err => {
-        alert(err)
+        toast(err)
         setLoadingOff(dispatch)
       })
 

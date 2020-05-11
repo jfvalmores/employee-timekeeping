@@ -2,10 +2,11 @@ import React, { useEffect, useCallback } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  setPopup,
+  setLogTypes,
   setLoadingOn,
   setLoadingOff,
   removeLoggedUser,
-  setLogTypes,
 } from '../state/operations'
 import { logout, getTimeLogTypeList } from '../api'
 
@@ -22,6 +23,7 @@ const Main = ({ children }) => {
   const companyName = useSelector(state => state.main.companyName)
   const user = useSelector(state => state.main.user)
   const logTypes = useSelector(state => state.main.logTypes)
+  let toastTimer = null;
 
   useEffect(() => {
     setLoading(true)
@@ -39,11 +41,29 @@ const Main = ({ children }) => {
     logout(user)
       .then(res => {
         if (res.data.success) {
-          alert(res.data.message)
+          toast(res.data.message, 'success')
           removeLoggedUser(dispatch)
         }
       })
       .catch(err => console.error(err))
+  }
+  const toast = (message, type = 'alert') => {
+    if (toastTimer) clearTimeout(toastTimer);
+
+    const popup = {
+      open: true,
+      message,
+      type
+    };
+
+    setPopup(dispatch, popup);
+
+    toastTimer = setTimeout(() => {
+      setPopup(dispatch, {
+        ...popup,
+        open: false,
+      });
+    }, 5000);
   }
 
   return (
@@ -51,12 +71,13 @@ const Main = ({ children }) => {
       {React.cloneElement(
         children,
         {
+          user,
+          toast,
+          doLogout,
+          logTypes,
           isLoading,
           setLoading,
           companyName,
-          user,
-          doLogout,
-          logTypes,
         }
       )}
       {isLoading &&

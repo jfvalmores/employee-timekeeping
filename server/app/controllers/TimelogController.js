@@ -25,7 +25,18 @@ createTimelog = (req, res) => {
           .status(202)
           .json({ success: false, error: `Invalid employee credentials.` })
       }
-      saveLog(employee);
+
+      Timelog
+        .find({ employee_no: body.employee_no, log_type: body.log_type, entry_date: fn.getMMDDYYYYSlashed() })
+        .exec((err, docs) => {
+          if (docs.length) {
+            return res
+              .status(202)
+              .json({ success: false, error: `Log already exists for today.` })
+          }
+
+          saveLog(employee);
+        })
     }).catch(err => console.log(err))
 
   const saveLog = (employee) => {

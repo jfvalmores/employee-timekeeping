@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react'
 import {
+  Col,
   Form,
   Button,
   Jumbotron,
   Container,
-  InputGroup,
 } from 'react-bootstrap'
 import { createTimelog } from '../api'
 import { Main, Header } from '../components'
@@ -18,6 +18,7 @@ const PortalPage = () => (
 const PortalPageContainer = (props) => {
   const {
     user,
+    toast,
     doLogout,
     logTypes,
     setLoading,
@@ -26,9 +27,13 @@ const PortalPageContainer = (props) => {
 
   return (
     <>
-      <Header user={user} doLogout={doLogout} />
+      <Header
+        user={user}
+        toast={toast}
+        doLogout={doLogout} />
       <Container>
         <TimelogForm
+          toast={toast}
           logTypes={logTypes}
           setLoading={setLoading}
           companyName={companyName} />
@@ -39,6 +44,7 @@ const PortalPageContainer = (props) => {
 
 const TimelogForm = (props) => {
   const {
+    toast,
     logTypes,
     setLoading,
     companyName
@@ -81,10 +87,10 @@ const TimelogForm = (props) => {
       createTimelog(data)
         .then(res => {
           if (res.data.success) {
-            alert(`${res.data.message} ${res.data.employee_name} ${res.data.type.alert} at ${res.data.time}.`)
+            toast(`${res.data.message} ${res.data.employee_name} ${res.data.type.alert} at ${res.data.time}.`, 'success')
             setState(defaultForm)
           } else {
-            alert(res.data.error)
+            toast(res.data.error)
           }
           setLoading(false)
         })
@@ -105,6 +111,24 @@ const TimelogForm = (props) => {
       <Form
         ref={formRef}
         onSubmit={handleSubmit}>
+        <Form.Row>
+          <Form.Group as={Col}>
+            <Form.Control
+              id="employee_no"
+              type="text"
+              placeholder="Employee No."
+              value={state.employee_no}
+              onChange={handleChange} />
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Control
+              id="pin_code"
+              type="password"
+              placeholder="PIN"
+              value={state.pin_code}
+              onChange={handleChange} />
+          </Form.Group>
+        </Form.Row>
         <Form.Group>
           <Form.Control
             id="log_type"
@@ -120,26 +144,6 @@ const TimelogForm = (props) => {
                 </option>
             )}
           </Form.Control>
-        </Form.Group>
-        <Form.Group>
-          <InputGroup size="lg">
-            <Form.Control
-              id="employee_no"
-              type="text"
-              placeholder="Employee No."
-              value={state.employee_no}
-              onChange={handleChange} />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group>
-          <InputGroup size="lg">
-            <Form.Control
-              id="pin_code"
-              type="password"
-              placeholder="PIN"
-              value={state.pin_code}
-              onChange={handleChange} />
-          </InputGroup>
         </Form.Group>
         <Button
           variant="primary"
