@@ -8,7 +8,7 @@ const initialState = {
     message: '',
     type: 'alert'
   }
-}
+};
 
 export const main = (state = initialState, action) => {
   switch (action.type) {
@@ -30,28 +30,28 @@ export const main = (state = initialState, action) => {
         ...state,
         user: action.user,
         isLoggedIn: true,
-      }
+      };
 
     case 'REMOVE_LOGGED_USER':
       return {
         ...state,
         user: null,
         isLoggedIn: false,
-      }
+      };
 
     case 'SET_TIMELOG_TYPES':
       return {
         ...state,
         logTypes: action.logTypes
-      }
+      };
 
     case 'SET_POPUP':
       return {
         ...state,
         popup: action.payload
-      }
+      };
 
     default:
-      return state
+      return state;
   }
 }

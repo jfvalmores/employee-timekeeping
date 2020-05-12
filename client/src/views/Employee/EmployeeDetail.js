@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 import {
   Col,
   Row,
   Form,
   Modal,
   Button,
-} from 'react-bootstrap'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+} from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const EmployeeDetail = (props) => {
   const {
@@ -80,9 +80,10 @@ const EmployeeDetail = (props) => {
             </Form.Label>
             <Col sm="9">
               <Form.Control
-                type="password"
-                placeholder="PIN"
                 maxLength="4"
+                type="password"
+                pattern="[0-9]*"
+                placeholder="PIN"
                 value={params.pin_code}
                 onChange={handleChange}
                 disabled={mode === 'VIEW'} />
@@ -296,4 +297,4 @@ const EmployeeDetail = (props) => {
   )
 }
 
-export default EmployeeDetail
+export default EmployeeDetail;

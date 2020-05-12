@@ -10,15 +10,15 @@ import {
   Employee,
   PortalPage,
   NotFoundPage,
-} from '../views'
-import { setPopup } from '../state/operations'
-import { Toast } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+} from '../views';
+import { setPopup } from '../state/operations';
+import { Toast } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 const App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.main.isLoggedIn)
-  const popup = useSelector(state => state.main.popup)
+  const isLoggedIn = useSelector(state => state.main.isLoggedIn);
+  const popup = useSelector(state => state.main.popup);
 
   return (
     <>
@@ -61,7 +61,7 @@ const PrivateRoutes = () => {
       <Route exact path="/employee-management" component={Employee} />
       <Redirect to="/home" />
     </Switch>
-  )
+  );
 }
 
 export default App;

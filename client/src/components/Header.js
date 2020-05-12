@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Row,
   Col,
@@ -6,9 +6,9 @@ import {
   Popover,
   Dropdown,
   OverlayTrigger,
-} from 'react-bootstrap'
-import LoginForm from './LoginForm'
-import { Link } from 'react-router-dom'
+} from 'react-bootstrap';
+import LoginForm from './LoginForm';
+import { Link } from 'react-router-dom';
 
 const Header = ({ user, doLogout, toast }) => {
   return (
@@ -52,7 +52,7 @@ const Header = ({ user, doLogout, toast }) => {
         </OverlayTrigger>
       }
     </Row>
-  )
+  );
 }
 
-export default Header
+export default Header;

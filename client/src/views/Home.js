@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Header, Main } from '../components'
-import { getTimelogs } from '../api'
-import { Table, Container } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import { Header, Main } from '../components';
+import { getTimelogs } from '../api';
+import { Table, Container } from 'react-bootstrap';
 
 const Home = () => (
   <Main>
@@ -15,12 +15,12 @@ const HomeContainer = (props) => {
     doLogout,
     logTypes,
     setLoading
-  } = props
+  } = props;
 
   const [logList, setLogList] = useState([]);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     getTimelogs(user.employee_no)
       .then(res => {
         if (res.data.success) {
@@ -28,13 +28,13 @@ const HomeContainer = (props) => {
         }
         setLoading(false)
       })
-      .catch(err => console.error(err))
+      .catch(err => console.error(err));
     // eslint-disable-next-line
   }, [])
 
   const timeLogLabel = (type) => {
-    const logType = logTypes.find(item => item.data === type)
-    return logType.label
+    const logType = logTypes.find(item => item.data === type);
+    return logType.label;
   }
 
   return (
@@ -69,4 +69,4 @@ const HomeContainer = (props) => {
   )
 }
 
-export default Home
+export default Home;

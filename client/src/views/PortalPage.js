@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react';
 import {
   Col,
   Form,
   Button,
   Jumbotron,
   Container,
-} from 'react-bootstrap'
-import { createTimelog } from '../api'
-import { Main, Header } from '../components'
+} from 'react-bootstrap';
+import { createTimelog } from '../api';
+import { Main, Header } from '../components';
 
 const PortalPage = () => (
   <Main>
@@ -23,7 +23,7 @@ const PortalPageContainer = (props) => {
     logTypes,
     setLoading,
     companyName,
-  } = props
+  } = props;
 
   return (
     <>
@@ -48,42 +48,44 @@ const TimelogForm = (props) => {
     logTypes,
     setLoading,
     companyName
-  } = props
+  } = props;
 
   const formRef = useRef(null);
   const defaultForm = {
     employee_no: '',
     pin_code: '',
     log_type: 'TIME_IN'
-  }
+  };
 
   const [state, setState] = useState(defaultForm);
 
   const handleChange = (e) => {
-    const { id, value } = e.target
+    if (!e.target.validity.valid) return;
+
+    const { id, value } = e.target;
     setState({
       ...state,
       [id]: value
-    })
+    });
   }
 
   const isFormValid = (data) => {
     if (String(data.employee_no) === '') {
-      focusOnField('employee_no')
-      return false
+      focusOnField('employee_no');
+      return false;
     } else if (String(data.pin_code) === '') {
-      focusOnField('pin_code')
-      return false
+      focusOnField('pin_code');
+      return false;
     }
 
-    return true
+    return true;
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const data = { ...state }
+    e.preventDefault();
+    const data = { ...state };
     if (isFormValid(data)) {
-      setLoading(true)
+      setLoading(true);
       createTimelog(data)
         .then(res => {
           if (res.data.success) {
@@ -94,7 +96,7 @@ const TimelogForm = (props) => {
           }
           setLoading(false)
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err));
     }
   }
 
@@ -116,6 +118,8 @@ const TimelogForm = (props) => {
             <Form.Control
               id="employee_no"
               type="text"
+              maxLength="6"
+              pattern="[0-9]*"
               placeholder="Employee No."
               value={state.employee_no}
               onChange={handleChange} />
@@ -123,7 +127,9 @@ const TimelogForm = (props) => {
           <Form.Group as={Col}>
             <Form.Control
               id="pin_code"
+              maxLength="4"
               type="password"
+              pattern="[0-9]*"
               placeholder="PIN"
               value={state.pin_code}
               onChange={handleChange} />
@@ -156,4 +162,4 @@ const TimelogForm = (props) => {
   )
 }
 
-export default PortalPage
+export default PortalPage;

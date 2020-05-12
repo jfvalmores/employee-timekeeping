@@ -1,8 +1,8 @@
-const Counters = require('../models/CountersModel')
+const Counters = require('../models/CountersModel');
 
 createNewSequence = (callback) => {
   Counters.findOne({ id: 'employee_no' }, (err, resultSeq) => {
-    let seq = 1
+    let seq = 1;
 
     if (!resultSeq) {
       const counter = new Counters({ id: 'employee_no', seq });
@@ -11,7 +11,7 @@ createNewSequence = (callback) => {
         .then(() => callback(seq));
     } else {
       seq = resultSeq.seq + 1;
-      Counters.updateOne({ _id: resultSeq._id }, { seq }, () => callback(seq))
+      Counters.updateOne({ _id: resultSeq._id }, { seq }, () => callback(seq));
     }
   })
 }
@@ -24,21 +24,21 @@ getTimelogTypeList = () => {
     { data: 'AM_BREAK_END', label: 'Morning break end', alert: 'ended morning break' },
     { data: 'PM_BREAK_START', label: 'Afternoon break start', alert: 'started afternoon break' },
     { data: 'PM_BREAK_END', label: 'Afternoon break end', alert: 'ended afternoon break' },
-  ]
+  ];
 }
 
 getMMDDYYYYSlashed = () => {
-  const now = new Date()
-  return `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${pad(now.getFullYear())}`
+  const now = new Date();
+  return `${pad(now.getMonth() + 1)}/${pad(now.getDate())}/${pad(now.getFullYear())}`;
 }
 
 getHHMMSSColon = () => {
-  const now = new Date()
-  return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+  const now = new Date();
+  return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
 pad = (s, len = 2, affix = '0') => {
-  return String(s).padStart(len, affix)
+  return String(s).padStart(len, affix);
 }
 
 module.exports = {
@@ -46,4 +46,4 @@ module.exports = {
   getTimelogTypeList,
   getMMDDYYYYSlashed,
   getHHMMSSColon,
-}
+};

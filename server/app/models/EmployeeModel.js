@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const Employee = new Schema(
   {
@@ -18,6 +18,6 @@ const Employee = new Schema(
     admin_flag: { type: Boolean, default: false },
   },
   { timestamps: true },
-)
+);
 
 module.exports = mongoose.model('employees', Employee);

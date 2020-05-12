@@ -1,25 +1,25 @@
-import * as actions from './actions'
+import * as actions from './actions';
 
 export const setLoadingOn = dispatch => {
-  dispatch(actions.setLoadingOn)
+  dispatch(actions.setLoadingOn);
 }
 
 export const setLoadingOff = dispatch => {
-  dispatch(actions.setLoadingOff)
+  dispatch(actions.setLoadingOff);
 }
 
 export const setLoggedUser = (dispatch, user) => {
-  dispatch(actions.setLoggedUser(user))
+  dispatch(actions.setLoggedUser(user));
 }
 
 export const removeLoggedUser = dispatch => {
-  dispatch(actions.removeLoggedUser)
+  dispatch(actions.removeLoggedUser);
 }
 
 export const setLogTypes = (dispatch, logTypes) => {
-  dispatch(actions.setLogTypes(logTypes))
+  dispatch(actions.setLogTypes(logTypes));
 }
 
 export const setPopup = (dispatch, payload) => {
-  dispatch(actions.setPopup(payload))
+  dispatch(actions.setPopup(payload));
 }

@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react';
 import {
   Form,
   Button,
-} from 'react-bootstrap'
-import { login } from '../api'
-import { setLoadingOn, setLoadingOff, setLoggedUser } from '../state/operations'
-import { useDispatch } from 'react-redux'
+} from 'react-bootstrap';
+import { login } from '../api';
+import { setLoadingOn, setLoadingOff, setLoggedUser } from '../state/operations';
+import { useDispatch } from 'react-redux';
 
 const LoginForm = ({ toast }) => {
   const [state, setState] = useState({
@@ -16,6 +16,8 @@ const LoginForm = ({ toast }) => {
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
+    if (!e.target.validity.valid) return;
+
     e.preventDefault();
     const { id, value } = e.target;
 
@@ -28,7 +30,7 @@ const LoginForm = ({ toast }) => {
   const handleKeyPress = (e) => {
     // On enter
     if (e.keyCode === 13) {
-      if (validate()) doLogin()
+      if (validate()) doLogin();
     }
   }
 
@@ -53,7 +55,7 @@ const LoginForm = ({ toast }) => {
   const doLogin = () => {
     if (!validate()) return;
 
-    setLoadingOn(dispatch)
+    setLoadingOn(dispatch);
     login({ ...state })
       .then(res => {
         if (res.data.success) {
@@ -67,7 +69,7 @@ const LoginForm = ({ toast }) => {
       .catch(err => {
         toast(err)
         setLoadingOff(dispatch)
-      })
+      });
 
   }
 
@@ -77,6 +79,8 @@ const LoginForm = ({ toast }) => {
         <Form.Control
           id="employee_no"
           type="text"
+          maxLength="6"
+          pattern="[0-9]*"
           placeholder="Employee No."
           value={state.employee_no}
           onChange={handleChange}
@@ -85,7 +89,9 @@ const LoginForm = ({ toast }) => {
       <Form.Row>
         <Form.Control
           id="pin_code"
+          maxLength="4"
           type="password"
+          pattern="[0-9]*"
           placeholder="PIN"
           value={state.pin_code}
           onChange={handleChange}
@@ -101,4 +107,4 @@ const LoginForm = ({ toast }) => {
   )
 }
 
-export default LoginForm
+export default LoginForm;

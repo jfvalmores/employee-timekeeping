@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 import {
   Table,
-} from 'react-bootstrap'
+} from 'react-bootstrap';
 
 const EmployeeList = (props) => {
   const {
     showDetail,
     handleDelete,
     employeeList,
-  } = props
+  } = props;
 
   return (
     <>
@@ -63,4 +63,4 @@ const EmployeeList = (props) => {
   )
 }
 
-export default EmployeeList
+export default EmployeeList;

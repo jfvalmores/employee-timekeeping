@@ -1,5 +1,5 @@
-const Employee = require('../models/EmployeeModel')
-const fn = require('../utils/Helper')
+const Employee = require('../models/EmployeeModel');
+const fn = require('../utils/Helper');
 
 setInitial = () => {
   Employee
@@ -16,22 +16,22 @@ setInitial = () => {
 
         employee.save()
       }
-    })
+    });
 }
-setInitial()
+setInitial();
 
 createEmployee = (req, res) => {
-  const body = req.body
+  const body = req.body;
 
   const proceed = (seq) => {
-    body.employee_no = seq
-    const employee = new Employee(body)
+    body.employee_no = seq;
+    const employee = new Employee(body);
 
     if (!employee) {
       return res.status(202).json({
         success: false,
         error: err
-      })
+      });
     }
 
     employee
@@ -48,14 +48,14 @@ createEmployee = (req, res) => {
           error,
           message: 'Employee not created!'
         })
-      })
+      });
   }
 
   fn.createNewSequence(proceed);
 }
 
 updateEmployee = (req, res) => {
-  const body = req.body
+  const body = req.body;
 
   Employee.findOneAndUpdate(
     { _id: req.params.id }, { ...body },
@@ -72,32 +72,32 @@ updateEmployee = (req, res) => {
         error,
         message: 'Employee not updated!',
       })
-    })
+    });
 }
 
 deleteEmployee = (req, res) => {
   Employee.findOneAndDelete({ _id: req.params.id }, (err, employee) => {
     if (err) {
-      return res.status(202).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err });
     }
 
-    return res.status(200).json({ success: true, data: employee })
-  }).catch(err => console.log(err))
+    return res.status(200).json({ success: true, data: employee });
+  }).catch(err => console.log(err));
 }
 
 getEmployeeById = async (req, res) => {
   await Employee.findOne({ _id: req.params.id }, (err, employee) => {
     if (err) {
-      return res.status(202).json({ success: false, error: err })
+      return res.status(202).json({ success: false, error: err });
     }
 
     if (!employee) {
       return res
         .status(202)
-        .json({ success: false, error: `Employee not found` })
+        .json({ success: false, error: `Employee not found` });
     }
-    return res.status(200).json({ success: true, data: employee })
-  }).catch(err => console.log(err))
+    return res.status(200).json({ success: true, data: employee });
+  }).catch(err => console.log(err));
 }
 
 getEmployees = async (req, res) => {
@@ -114,7 +114,7 @@ getEmployees = async (req, res) => {
           .json({ success: false, error: `Employee not found` })
       }
       return res.status(200).json({ success: true, data: employees })
-    })
+    });
 }
 
 module.exports = {
@@ -123,4 +123,4 @@ module.exports = {
   deleteEmployee,
   getEmployees,
   getEmployeeById,
-}
+};
