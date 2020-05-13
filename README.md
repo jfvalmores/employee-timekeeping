@@ -17,4 +17,4 @@
 * NodeJS
 
 ## Demo
-[Live](https://vibrant-lalande-3239d7.netlify.app/portal)
+[Employee Timekeeping](https://vibrant-lalande-3239d7.netlify.app/portal)
