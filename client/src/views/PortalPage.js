@@ -7,8 +7,14 @@ import {
   Jumbotron,
   Container,
 } from 'react-bootstrap';
-import { createTimelog } from '../api';
-import { Main, Header } from '../components';
+import {
+  createTimelog,
+  getQuoteOfTheDay
+} from '../api';
+import {
+  Main,
+  Header
+} from '../components';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -54,7 +60,7 @@ const PortalPageContainer = (props) => {
   )
 }
 
-const DateTimeBox = (props) => {
+const DateTimeBox = () => {
   const [dateNow, setDateNow] = useState(getDateTimeNow());
 
   useEffect(() => {
@@ -68,6 +74,31 @@ const DateTimeBox = (props) => {
       <h2>{dateNow.time}</h2>
       <span>{dateNow.date}</span> <br />
       <span>{dateNow.day}</span>
+    </div>
+  );
+}
+
+const QuoteBox = () => {
+  const [quote, setQuote] = useState('');
+
+  useEffect(() => {
+    getQuoteOfTheDay()
+      .then(res => {
+        if (res && res.data && res.data.contents) {
+          const contents = res.data.contents;
+          if (contents.quotes && Array.isArray(contents.quotes)) {
+            setQuote(contents.quotes[0]);
+          }
+        }
+      });
+  }, []);
+
+  return (
+    <div style={{ fontSize: 12, textAlign: 'center' }}>
+      <div style={{ fontStyle: 'italic' }}>
+        "{quote.quote}"
+      </div>
+      <div>- {quote.author} -</div>
     </div>
   );
 }
@@ -137,60 +168,63 @@ const TimelogForm = (props) => {
   }
 
   return (
-    <Jumbotron id="portal-panel">
-      <Alert variant="light" style={{ textAlign: 'center' }}>
-        <h4 id="portal-name">{companyName}</h4>
-        <DateTimeBox />
-        <Form
-          ref={formRef}
-          onSubmit={handleSubmit}>
-          <Form.Row>
-            <Form.Group as={Col}>
+    <>
+      <Jumbotron id="portal-panel">
+        <Alert variant="light" style={{ textAlign: 'center' }}>
+          <h4 id="portal-name">{companyName}</h4>
+          <DateTimeBox />
+          <Form
+            ref={formRef}
+            onSubmit={handleSubmit}>
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Control
+                  id="employee_no"
+                  type="text"
+                  maxLength="6"
+                  pattern="[0-9]*"
+                  placeholder="Employee No."
+                  value={state.employee_no}
+                  onChange={handleChange} />
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Control
+                  id="pin_code"
+                  maxLength="4"
+                  type="password"
+                  pattern="[0-9]*"
+                  placeholder="PIN"
+                  value={state.pin_code}
+                  onChange={handleChange} />
+              </Form.Group>
+            </Form.Row>
+            <Form.Group>
               <Form.Control
-                id="employee_no"
-                type="text"
-                maxLength="6"
-                pattern="[0-9]*"
-                placeholder="Employee No."
-                value={state.employee_no}
-                onChange={handleChange} />
+                id="log_type"
+                as="select"
+                value={state.log_type}
+                onChange={handleChange}>
+                {logTypes.map(
+                  (option, index) =>
+                    <option
+                      key={index}
+                      value={option.data}>
+                      {option.label}
+                    </option>
+                )}
+              </Form.Control>
             </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Control
-                id="pin_code"
-                maxLength="4"
-                type="password"
-                pattern="[0-9]*"
-                placeholder="PIN"
-                value={state.pin_code}
-                onChange={handleChange} />
-            </Form.Group>
-          </Form.Row>
-          <Form.Group>
-            <Form.Control
-              id="log_type"
-              as="select"
-              value={state.log_type}
-              onChange={handleChange}>
-              {logTypes.map(
-                (option, index) =>
-                  <option
-                    key={index}
-                    value={option.data}>
-                    {option.label}
-                  </option>
-              )}
-            </Form.Control>
-          </Form.Group>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={handleSubmit}>
-            Submit
+            <Button
+              variant="primary"
+              type="submit"
+              onClick={handleSubmit}>
+              Submit
         </Button>
-        </Form>
-      </Alert>
-    </Jumbotron>
+          </Form>
+        </Alert>
+      </Jumbotron>
+      <QuoteBox />
+    </>
   )
 }
 

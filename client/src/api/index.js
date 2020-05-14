@@ -17,6 +17,8 @@ const createEmployee = (params) => conn.post('employee', params);
 const updateEmployee = (id, params) => conn.put(`employee/${id}`, params);
 const deleteEmployee = (id) => conn.delete(`employee/${id}`);
 
+const getQuoteOfTheDay = () => axios.get(`https://quotes.rest/qod`);
+
 // TODO: More admin functions i.e. Timelog modifications
 
 export {
@@ -32,4 +34,6 @@ export {
   createEmployee,
   updateEmployee,
   deleteEmployee,
+
+  getQuoteOfTheDay,
 }
