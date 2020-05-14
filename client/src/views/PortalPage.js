@@ -64,9 +64,11 @@ const DateTimeBox = () => {
   const [dateNow, setDateNow] = useState(getDateTimeNow());
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       setDateNow(getDateTimeNow());
     }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
