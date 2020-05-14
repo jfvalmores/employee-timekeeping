@@ -15,11 +15,12 @@
 #portal-panel {
   max-width: 500px;
   margin: 50px auto;
+  background-color: white;
 }
 
 @media (min-width: 576px) {
   #portal-panel {
-    padding: 1rem 2rem 2rem;
+    padding: 1rem 2rem 1rem;
   }
 }
 
@@ -30,12 +31,21 @@
   text-align: center;
 }
 
+#portal-panel > div {
+  border: 1px solid #babebe;
+  border-radius: .25rem;
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(120,120,120,1);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(120,120,120,1);
+  box-shadow: 2px 2px 5px 0px rgba(120,120,120,1);
+}
+
 #main-header {
   margin: 10px 15px;
 }
 
-#main-header > h2 {
+#main-header > h4 {
   font-weight: 400;
+  color: #818182;
 }
 
 #loading-overlay {

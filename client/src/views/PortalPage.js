@@ -1,13 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Col,
   Form,
+  Alert,
   Button,
   Jumbotron,
   Container,
 } from 'react-bootstrap';
 import { createTimelog } from '../api';
 import { Main, Header } from '../components';
+
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+function getDateTimeNow() {
+  const now = new Date();
+  return {
+    day: days[now.getDay()],
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString(),
+  };
+}
 
 const PortalPage = () => (
   <Main>
@@ -42,6 +54,24 @@ const PortalPageContainer = (props) => {
   )
 }
 
+const DateTimeBox = (props) => {
+  const [dateNow, setDateNow] = useState(getDateTimeNow());
+
+  useEffect(() => {
+    setInterval(() => {
+      setDateNow(getDateTimeNow());
+    }, 1000);
+  }, []);
+
+  return (
+    <div style={{ paddingBottom: 15 }}>
+      <h2>{dateNow.time}</h2>
+      <span>{dateNow.date}</span> <br />
+      <span>{dateNow.day}</span>
+    </div>
+  );
+}
+
 const TimelogForm = (props) => {
   const {
     toast,
@@ -56,7 +86,6 @@ const TimelogForm = (props) => {
     pin_code: '',
     log_type: 'TIME_IN'
   };
-
   const [state, setState] = useState(defaultForm);
 
   const handleChange = (e) => {
@@ -109,55 +138,58 @@ const TimelogForm = (props) => {
 
   return (
     <Jumbotron id="portal-panel">
-      <h4 id="portal-name">{companyName}</h4>
-      <Form
-        ref={formRef}
-        onSubmit={handleSubmit}>
-        <Form.Row>
-          <Form.Group as={Col}>
+      <Alert variant="light" style={{ textAlign: 'center' }}>
+        <h4 id="portal-name">{companyName}</h4>
+        <DateTimeBox />
+        <Form
+          ref={formRef}
+          onSubmit={handleSubmit}>
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Control
+                id="employee_no"
+                type="text"
+                maxLength="6"
+                pattern="[0-9]*"
+                placeholder="Employee No."
+                value={state.employee_no}
+                onChange={handleChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control
+                id="pin_code"
+                maxLength="4"
+                type="password"
+                pattern="[0-9]*"
+                placeholder="PIN"
+                value={state.pin_code}
+                onChange={handleChange} />
+            </Form.Group>
+          </Form.Row>
+          <Form.Group>
             <Form.Control
-              id="employee_no"
-              type="text"
-              maxLength="6"
-              pattern="[0-9]*"
-              placeholder="Employee No."
-              value={state.employee_no}
-              onChange={handleChange} />
+              id="log_type"
+              as="select"
+              value={state.log_type}
+              onChange={handleChange}>
+              {logTypes.map(
+                (option, index) =>
+                  <option
+                    key={index}
+                    value={option.data}>
+                    {option.label}
+                  </option>
+              )}
+            </Form.Control>
           </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Control
-              id="pin_code"
-              maxLength="4"
-              type="password"
-              pattern="[0-9]*"
-              placeholder="PIN"
-              value={state.pin_code}
-              onChange={handleChange} />
-          </Form.Group>
-        </Form.Row>
-        <Form.Group>
-          <Form.Control
-            id="log_type"
-            as="select"
-            value={state.log_type}
-            onChange={handleChange}>
-            {logTypes.map(
-              (option, index) =>
-                <option
-                  key={index}
-                  value={option.data}>
-                  {option.label}
-                </option>
-            )}
-          </Form.Control>
-        </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-          onClick={handleSubmit}>
-          Submit
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={handleSubmit}>
+            Submit
         </Button>
-      </Form>
+        </Form>
+      </Alert>
     </Jumbotron>
   )
 }

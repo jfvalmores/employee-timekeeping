@@ -13,11 +13,11 @@ import { Link } from 'react-router-dom';
 const Header = ({ user, doLogout, toast }) => {
   return (
     <Row id="main-header">
-      <h2>Employee Time Tracker</h2>
+      <h4>Employee Time Tracker</h4>
       <Col />
       {user ?
         <>
-          <h2 style={{ marginRight: 10 }}>{`Hi, ${user.first_name} `}</h2>
+          <h4 style={{ marginRight: 10 }}>{`Hi, ${user.first_name} `}</h4>
           {user.admin_flag &&
             <Dropdown id="admin-dropdown">
               <Dropdown.Toggle variant="success" id="dropdown-basic">

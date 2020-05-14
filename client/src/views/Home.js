@@ -49,7 +49,7 @@ const HomeContainer = (props) => {
           hover size="sm">
           <thead>
             <tr>
-              <th>Log Type</th>
+              <th>Log</th>
               <th>Date</th>
               <th>Time</th>
             </tr>
