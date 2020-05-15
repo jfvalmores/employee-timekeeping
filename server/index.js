@@ -37,7 +37,7 @@ app.use('/api', [
 ]);
 
 app.get('/', (req, res) => {
-  res.send("Hello world. It's alive!")
+  res.send("Hello world. It's alive!");
 });
 
 db.once('error', console.error.bind(console, 'MongoDB connection failed:'));
