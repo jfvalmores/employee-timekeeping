@@ -1,25 +1,6 @@
 const Employee = require('../models/EmployeeModel');
 const fn = require('../utils/Helper');
 
-setInitial = () => {
-  Employee
-    .findOne({ employee_no: 0, pin_code: 0 })
-    .exec((err, emp) => {
-      if (err || !emp) {
-        const employee = new Employee({
-          employee_no: 0,
-          pin_code: 0,
-          first_name: 'Admin',
-          last_name: 'Nistrator',
-          admin_flag: true,
-        })
-
-        employee.save()
-      }
-    });
-}
-setInitial();
-
 createEmployee = (req, res) => {
   const body = req.body;
 
